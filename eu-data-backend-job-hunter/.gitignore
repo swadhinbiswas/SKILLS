@@ -1,0 +1,17 @@
+# Secrets & personal data — never commit these
+.env
+*.env
+profile/master_profile.json
+profile/master_profile.yaml
+profile/master_profile.yml
+applications/*
+!applications/.gitkeep
+state/*.json
+state/*.lock
+logs/*
+!logs/.gitkeep
+
+# Generated / tooling cache
+__pycache__/
+*.pyc
+.DS_Store

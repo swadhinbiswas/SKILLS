@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EU Software, Data & Backend Jobs — Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💼</text></svg>">
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <div class="brand-logo">💼</div>
+      <div>
+        <h1>EU Software, Data &amp; Backend Jobs</h1>
+        <p class="tagline">Software · Data · Backend Engineering · Junior + Mid+ · EU/EEA + UK/CH · EU-eligible remote</p>
+      </div>
+    </div>
+    <div class="last-updated" id="last-updated">—</div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- stats -->
+  <section class="stats" id="stats" aria-label="Job statistics">
+    <div class="stat-card"><span class="stat-num" id="stat-total">–</span><span class="stat-label">Live postings</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-today">–</span><span class="stat-label">Updated today</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-remote">–</span><span class="stat-label">Remote</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-reloc">–</span><span class="stat-label">Relo/visa</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-data">–</span><span class="stat-label">Data Eng</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-backend">–</span><span class="stat-label">Backend Eng</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-software">–</span><span class="stat-label">Software Eng</span></div>
+  </section>
+
+  <!-- filters -->
+  <section class="filters card" aria-label="Filters">
+    <div class="search-row">
+      <input type="search" id="q" class="search" placeholder="Search title, company, location…" autocomplete="off">
+      <button class="btn btn-primary" id="btn-search">Search</button>
+    </div>
+    <div class="filter-row">
+      <label class="select-wrap">
+        <span>Track</span>
+        <select id="track">
+          <option value="all">All tracks</option>
+          <option value="data_engineer">Data Engineer</option>
+          <option value="backend_engineer">Backend Engineer</option>
+          <option value="software_engineer">Software Engineer</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label class="select-wrap">
+        <span>Level</span>
+        <select id="level">
+          <option value="all">All levels</option>
+          <option value="junior">Junior</option>
+          <option value="mid_plus">Mid+</option>
+          <option value="unclear">Unclear</option>
+          <option value="mixed">Mixed signal</option>
+          <option value="internship">Internship / trainee</option>
+        </select>
+      </label>
+      <label class="select-wrap">
+        <span>Country</span>
+        <select id="country"><option value="all">All countries</option></select>
+      </label>
+      <label class="select-wrap">
+        <span>Source</span>
+        <select id="source"><option value="all">All sources</option></select>
+      </label>
+      <label class="select-wrap">
+        <span>Sort</span>
+        <select id="sort">
+          <option value="new">Newest</option>
+          <option value="match">Match score</option>
+          <option value="old">Oldest</option>
+          <option value="company">Company A–Z</option>
+        </select>
+      </label>
+      <label class="select-wrap">
+        <span>Min match</span>
+        <select id="minmatch">
+          <option value="0">Any</option>
+          <option value="50">50+</option>
+          <option value="70">70+</option>
+          <option value="85">85+</option>
+        </select>
+      </label>
+      <label class="chip-toggle"><input type="checkbox" id="remote"> <span>🌍 Remote only</span></label>
+      <label class="chip-toggle"><input type="checkbox" id="reloc"> <span>✈️ Relo/visa</span></label>
+      <label class="chip-toggle"><input type="checkbox" id="hideApplied"> <span>🚫 Hide applied</span></label>
+      <button class="btn btn-ghost" id="btn-reset">Reset</button>
+    </div>
+  </section>
+
+  <!-- results -->
+  <section class="results-head">
+    <h2 id="results-title">Jobs</h2>
+    <div class="results-tools">
+      <span class="results-count" id="results-count"></span>
+      <button class="btn btn-sm btn-ghost" id="btn-apps">📁 Applications</button>
+    </div>
+  </section>
+
+  <div id="grid" class="grid" aria-live="polite"></div>
+  <div id="empty" class="empty hidden">No jobs match your filters.</div>
+  <div id="loading" class="loading hidden">
+    <div class="spinner"></div><span>Loading jobs…</span>
+  </div>
+
+  <div class="pager" id="pager"></div>
+</main>
+
+<!-- job detail modal -->
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<footer class="footer container">
+  <p>Auto-collected by the EU Software/Data/Backend Job Hunter skill. Verification is on you — always check the posting before applying.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

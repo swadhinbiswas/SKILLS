@@ -1,0 +1,94 @@
+{
+  "name": "Your Name",
+  "headline": "Data & Backend Engineer",
+  "email": "you@example.com",
+  "phone": "+00 000 000000",
+  "location": "Berlin, Germany",
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/you/",
+    "github": "https://github.com/you",
+    "portfolio": ""
+  },
+
+  "tracks": ["data_engineer", "backend_engineer"],
+  "seniority_target": ["junior", "mid_plus"],
+  "years_experience": 3,
+
+  "preferred_countries": ["de", "nl", "at", "ch", "ie", "se", "dk"],
+  "remote_preference": "hybrid",
+  "willing_to_relocate": true,
+  "work_authorization": ["eu"],
+  "languages": [
+    { "language": "English", "level": "C2" },
+    { "language": "German", "level": "B1" }
+  ],
+
+  "salary": { "currency": "EUR", "min": 55000, "target": 70000 },
+
+  "skills": {
+    "core": ["python", "sql", "postgresql", "airflow", "dbt", "spark", "kafka"],
+    "familiar": ["docker", "kubernetes", "aws", "terraform", "redis", "rest"],
+    "learning": ["rust", "gcp", "flink"]
+  },
+
+  "excluded_companies": [],
+  "excluded_keywords": ["unpaid", "commission only"],
+
+  "summary": "Data and backend engineer who builds reliable pipelines and services. Comfortable owning a system from ingestion to API.",
+
+  "experience": [
+    {
+      "company": "Example GmbH",
+      "title": "Data Engineer",
+      "location": "Berlin, Germany",
+      "start": "2023-04",
+      "end": "present",
+      "bullets": [
+        "Built and maintained Airflow ELT pipelines processing 2TB/day into a Snowflake warehouse.",
+        "Introduced dbt models and tests, cutting data incidents by 40%.",
+        "Designed Kafka ingestion for near-real-time event data.",
+        "Containerised services with Docker and deployed on Kubernetes."
+      ]
+    },
+    {
+      "company": "Previous Ltd",
+      "title": "Backend Developer",
+      "location": "Remote",
+      "start": "2021-06",
+      "end": "2023-03",
+      "bullets": [
+        "Developed REST APIs in Python (FastAPI) backed by PostgreSQL.",
+        "Improved query performance with indexing and caching in Redis.",
+        "Set up CI/CD with GitHub Actions."
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "name": "Open data pipeline",
+      "description": "Open-source ingestion framework (Python, Spark, S3).",
+      "link": "https://github.com/you/project"
+    }
+  ],
+
+  "education": [
+    {
+      "institution": "University of Somewhere",
+      "degree": "BSc Computer Science",
+      "start": "2017",
+      "end": "2021",
+      "details": "Focus on distributed systems and databases."
+    }
+  ],
+
+  "certifications": [
+    { "name": "AWS Certified Data Engineer – Associate", "year": "2025" }
+  ],
+
+  "application": {
+    "tone": "warm-professional",
+    "sign_off": "Best regards",
+    "custom_note": "I'm authorised to work in the EU and open to hybrid roles."
+  }
+}

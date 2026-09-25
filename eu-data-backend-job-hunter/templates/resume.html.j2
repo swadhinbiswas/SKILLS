@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ name }} — {{ headline }}</title>
+<style>
+  :root { --ink:#1a1a1a; --muted:#555; --line:#ddd; --accent:#1f4e79; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--ink);
+         max-width: 820px; margin: 32px auto; padding: 0 28px; line-height: 1.45; font-size: 13.5px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 16px; }
+  h1 { margin: 0; font-size: 26px; letter-spacing: .2px; }
+  .headline { color: var(--accent); font-weight: 600; margin: 4px 0 6px; font-size: 14px; }
+  .contact { color: var(--muted); font-size: 12px; }
+  .contact a { color: var(--accent); text-decoration: none; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--accent);
+       border-bottom: 1px solid var(--line); padding-bottom: 3px; margin: 18px 0 8px; }
+  .summary { margin: 0; }
+  .skills span { display: inline-block; border: 1px solid var(--line); border-radius: 10px;
+                 padding: 1px 9px; margin: 0 5px 5px 0; font-size: 12px; }
+  .role { margin-bottom: 13px; }
+  .role-head { display: flex; justify-content: space-between; gap: 10px; }
+  .role-title { font-weight: 700; }
+  .role-meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  ul { margin: 5px 0 0; padding-left: 18px; }
+  li { margin-bottom: 3px; }
+  .two-col { display: flex; gap: 24px; }
+  .two-col > div { flex: 1; }
+  .muted { color: var(--muted); font-size: 12px; }
+  a { color: var(--accent); }
+  @media print { body { margin: 0; padding: 0 12px; font-size: 12px; } a { color: var(--ink); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>{{ name }}</h1>
+  <div class="headline">{{ headline }}</div>
+  <div class="contact">
+    {%- set bits = [] -%}
+    {%- if email %}{% set _ = bits.append('<a href="mailto:' ~ email ~ '">' ~ email ~ '</a>') %}{% endif -%}
+    {%- if phone %}{% set _ = bits.append(phone) %}{% endif -%}
+    {%- if location %}{% set _ = bits.append(location) %}{% endif -%}
+    {%- for link in links %}{% set _ = bits.append('<a href="' ~ link.url ~ '">' ~ link.label ~ '</a>') %}{% endfor -%}
+    {{ bits | join(' &nbsp;·&nbsp; ') | safe }}
+  </div>
+</header>
+
+{% if summary %}
+<h2>Summary</h2>
+<p class="summary">{{ summary }}</p>
+{% endif %}
+
+{% if skills %}
+<h2>Skills</h2>
+<div class="skills">
+  {%- for skill in skills %}<span>{{ skill }}</span>{% endfor -%}
+</div>
+{% endif %}
+
+{% if experience %}
+<h2>Experience</h2>
+{% for role in experience %}
+<div class="role">
+  <div class="role-head">
+    <span class="role-title">{{ role.title }}{% if role.company %} — {{ role.company }}{% endif %}</span>
+    <span class="role-meta">{{ role.dates }}{% if role.location %} · {{ role.location }}{% endif %}</span>
+  </div>
+  {% if role.bullets %}
+  <ul>
+    {%- for bullet in role.bullets %}<li>{{ bullet }}</li>{% endfor -%}
+  </ul>
+  {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if projects %}
+<h2>Projects</h2>
+{% for project in projects %}
+<div class="role">
+  <div class="role-head">
+    <span class="role-title">{{ project.name }}</span>
+    {% if project.link %}<span class="role-meta"><a href="{{ project.link }}">{{ project.link }}</a></span>{% endif %}
+  </div>
+  {% if project.description %}<div>{{ project.description }}</div>{% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="two-col">
+  {% if education %}
+  <div>
+    <h2>Education</h2>
+    {% for edu in education %}
+    <div class="role">
+      <div class="role-title">{{ edu.degree }}</div>
+      <div class="muted">{{ edu.institution }}{% if edu.dates %} · {{ edu.dates }}{% endif %}</div>
+      {% if edu.details %}<div class="muted">{{ edu.details }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if certifications %}
+  <div>
+    <h2>Certifications</h2>
+    <ul>
+      {%- for cert in certifications %}<li>{{ cert.name }}{% if cert.year %} ({{ cert.year }}){% endif %}</li>{% endfor -%}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Tailored for {{ job.title }} at {{ job.company }} ({{ job.url }}) -->
+</body>
+</html>
