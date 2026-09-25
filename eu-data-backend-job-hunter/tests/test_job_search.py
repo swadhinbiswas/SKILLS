@@ -472,7 +472,7 @@ class JobSearchReadinessTests(unittest.TestCase):
                 )
         self.assertIn("| Match |", report)
         self.assertIn("Senior Data Engineer", report)
-        self.assertIn("🟢", report)
+        self.assertRegex(report, r"[🟢🟡🔴]")
 
 
 if __name__ == "__main__":

@@ -129,6 +129,34 @@ SKILL_ALIASES: dict[str, list[str]] = {
     "looker": ["looker"],
     "excel": ["excel", "spreadsheets"],
     "n8n": ["n8n"],
+    # Added for broader modern data/ML stacks (v3).
+    "mlflow": ["mlflow"],
+    "unity catalog": ["unity catalog"],
+    "delta live tables": ["delta live tables", "delta live table"],
+    "turso": ["turso", "libsql"],
+    "motherduck": ["motherduck", "mother duck"],
+    "clickhouse": ["clickhouse"],
+    "timescaledb": ["timescaledb", "timescale"],
+    "qdrant": ["qdrant"],
+    "pinecone": ["pinecone"],
+    "weaviate": ["weaviate"],
+    "chroma": ["chroma", "chromadb"],
+    "hugging face": ["hugging face", "huggingface"],
+    "scikit-learn": ["scikit-learn", "scikit learn", "sklearn"],
+    "nginx": ["nginx"],
+    "hono": ["hono"],
+    "elysia": ["elysia"],
+    "opencv": ["opencv"],
+    "apache superset": ["apache superset", "superset"],
+    "metabase": ["metabase"],
+    "airbyte": ["airbyte"],
+    "apache nifi": ["apache nifi", "nifi"],
+    "apache druid": ["apache druid", "druid"],
+    "minio": ["minio"],
+    "confluent": ["confluent"],
+    "hadoop": ["hadoop", "hdfs", "hive", "dataproc"],
+    "azure data factory": ["azure data factory", "data factory"],
+    "google cloud composer": ["cloud composer", "google cloud composer"],
 }
 
 # Terms used for skill-gap analysis: jobs often require technologies the
@@ -204,8 +232,11 @@ def load_profile(path: str | Path | None = None) -> dict:
     """
     candidates = []
     if path:
+        # An explicit path is authoritative: never silently fall back to a
+        # different profile when the requested one is missing or misspelled.
         candidates.append(Path(path))
-    candidates.extend(DEFAULT_PROFILE_PATHS)
+    else:
+        candidates.extend(DEFAULT_PROFILE_PATHS)
     chosen = next((p for p in candidates if p and p.exists()), None)
     if chosen is None:
         return {}
@@ -492,8 +523,13 @@ def score_job(job: dict, profile: dict, weights: dict | None = None) -> dict:
     core_hits = hits["core"]
     fam_hits = hits["familiar"]
     learn_hits = hits["learning"]
-    owned_total = max(1, len(profile.get("skills", {}).get("core", [])))
-    weighted = min(1.0, (2 * len(core_hits) + len(fam_hits)) / (2 * owned_total))
+    # Normalize against a target amount of overlap (about 5 core skills, or an
+    # equivalent mix), NOT against the candidate's total skill count — otherwise
+    # a broad, strong stack would dilute every score.
+    weighted = min(
+        1.0,
+        (2 * len(core_hits) + len(fam_hits) + 0.5 * len(learn_hits)) / 10.0,
+    )
     skill_points = round(weights["skills"] * weighted)
     if core_hits:
         reasons.append("matches core skills: " + ", ".join(core_hits[:6]))
