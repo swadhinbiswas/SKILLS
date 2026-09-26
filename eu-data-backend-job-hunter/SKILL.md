@@ -123,6 +123,10 @@ will do. The board/CLI prepare everything; the user reviews and sends.
   dedupe, profile scoring. Stdlib only. Run `python scripts/job_search.py --help`.
 - `scripts/master_profile.py` — loads the master profile and computes the
   explainable 0–100 match score plus skill gaps.
+- `scripts/import_resume.py` — converts a JSON Resume–style `resume.json`
+  (basics, work, projects, skills, education, languages, certificates,
+  publications, awards + a `jobSearch` block) into `profile/master_profile.json`
+  so the resume seed is the single source of truth.
 - `scripts/apply.py` — generates the tailored resume (MD/HTML/PDF), cover
   letter, and recruiter-email draft for a job. **Drafts only.**
 - `scripts/turso.py` — stdlib Turso (libsql) HTTP client: schema init, job
@@ -146,14 +150,23 @@ will do. The board/CLI prepare everything; the user reviews and sends.
 
 The pipeline is personalized by a single **master profile** file. Put it at
 `profile/master_profile.json` (a YAML version in the same folder also works).
-Copy `profile/master_profile.example.json` to start, or paste in a real CV;
+Generate it from a JSON Resume–style seed with
+`python scripts/import_resume.py` (default `~/JOBSCAN/resume.json`), copy
+`profile/master_profile.example.json` to start, or write it by hand;
 field-by-field docs live in `profile/README.md`.
+
+The profile is a **complete inventory** of your skills, experience, and
+preferences — list everything, with an honest core/familiar/learning tier. The
+matcher decides relevance per job; it is not a curated shortlist.
 
 When a usable profile is present, `job_search.py` scores every posting:
 
-- `match_score` — 0–100, blending skill overlap (core skills weigh double),
-  role track, seniority fit, country/remote preference, salary fit, freshness,
-  and relocation support.
+- `match_score` — 0–100, blending skill coverage (job-aware: the skills *this
+  posting* asks for, weighted core > familiar > learning, minus the ones you
+  lack), role track, seniority fit, country/remote preference, salary fit,
+  freshness, and relocation support. The profile holds your *complete* skill
+  inventory; relevance is decided per job, so profile size never inflates or
+  dilutes a score.
 - `match_reasons` — plain-English "why it fits" lines.
 - `match_gaps` — missing skills, seniority/country/salary mismatches, work-
   authorization concerns.

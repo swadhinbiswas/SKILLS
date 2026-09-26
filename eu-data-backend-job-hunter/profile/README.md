@@ -5,7 +5,30 @@ experience, preferences, salary, work authorization, and application tone.
 Everything personal in this skill — match scores, resume tailoring, cover
 letters, recruiter emails — is generated from this file.
 
-## Setup
+**It should hold your *complete* inventory, not a curated subset.** List every
+skill, tool, and technology you have, with an honest proficiency tier
+(`core` = strong/production, `familiar` = working, `learning` = growing). The
+matcher decides relevance *per job* — it rewards covering the skills a posting
+actually asks for and penalizes the ones it asks for that you lack — so a broad
+profile does not dilute or inflate your scores. Don't pre-trim it.
+
+## Seed it from `resume.json` (recommended)
+
+If you keep a JSON Resume–style `resume.json` (e.g. `~/JOBSCAN/resume.json`),
+generate the master profile from it instead of editing two files:
+
+```sh
+python scripts/import_resume.py                       # default ~/JOBSCAN/resume.json
+python scripts/import_resume.py --resume path/to/resume.json --out profile/master_profile.json
+python scripts/import_resume.py --print               # preview without writing
+```
+
+It maps standard JSON Resume fields (basics, work, projects, skills, education,
+languages, certificates, publications, awards) plus a custom `jobSearch` block
+for search preferences. Keep `resume.json` rich; regenerate the profile when it
+changes.
+
+## Manual setup
 
 1. Copy the example and edit it:
 
@@ -48,13 +71,16 @@ Each job gets points out of 100:
 
 | Component | Max | Notes |
 |---|---|---|
-| Skill overlap | 40 | Weighted: `core` skills count double `familiar` |
+| Skill overlap | 40 | Job-aware: `coverage × depth`, where coverage = matched ÷ (matched + missing) against the skills *this posting* asks for, and depth rises with how many of your skills it hits. Profile size does not affect it. |
 | Role track | 15 | Full points when the job's track is in your `tracks` |
 | Seniority | 15 | Full when it matches your target |
 | Location/remote | 15 | Preferred country + remote preference + relocation handling |
 | Salary | 8 | Full when a disclosed salary meets your `target` |
 | Freshness | 5 | Newer postings score slightly higher |
 | Relocation support | 2 | Small bonus when the employer offers it |
+
+Skill tiers are **weights, not filters**: everything you list is considered,
+but `core` skills count double `familiar`, which count double `learning`.
 
 Scores come with plain-English **reasons** and **gaps** (missing skills,
 seniority mismatch, country mismatch, salary below target) so you can judge

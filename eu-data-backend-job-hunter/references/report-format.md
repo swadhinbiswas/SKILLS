@@ -7,8 +7,11 @@ When a **master profile** is configured, each posting carries a
 (highest match first, then the hub/recency score below). Without a profile,
 the hub/recency score is the only ranking. The score is composed of:
 
-1. **Skill overlap** (40): the candidate's `core` skills count double
-   `familiar` skills, against the posting title + description.
+1. **Skill coverage** (40): job-aware — `coverage × depth`, where coverage is
+   matched ÷ (matched + missing) against the skills *this posting* asks for,
+   and depth rises with how many of the candidate's skills it hits. `core`
+   skills weigh double `familiar`, which weigh double `learning`. Independent
+   of profile size.
 2. **Role track** (15): full points when the posting's track is one the
    candidate targets.
 3. **Seniority** (15): full points when it matches the candidate's target.

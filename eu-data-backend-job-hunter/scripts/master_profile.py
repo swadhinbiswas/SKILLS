@@ -519,23 +519,24 @@ def score_job(job: dict, profile: dict, weights: dict | None = None) -> dict:
                            [], [], excluded=True)
 
     # -- skills ----------------------------------------------------------
+    # The master profile is a complete inventory; relevance is decided per
+    # job. We reward covering the skills THIS posting asks for and penalise
+    # the ones it asks for that the profile lacks, so the score does not
+    # depend on how many total skills the profile happens to list.
     hits = extract_profile_skills(text, profile)
     core_hits = hits["core"]
     fam_hits = hits["familiar"]
     learn_hits = hits["learning"]
-    # Normalize against a target amount of overlap (about 5 core skills, or an
-    # equivalent mix), NOT against the candidate's total skill count — otherwise
-    # a broad, strong stack would dilute every score.
-    weighted = min(
-        1.0,
-        (2 * len(core_hits) + len(fam_hits) + 0.5 * len(learn_hits)) / 10.0,
-    )
-    skill_points = round(weights["skills"] * weighted)
+    missing = detect_gaps(text, profile)
+    matched_weight = 2 * len(core_hits) + len(fam_hits) + 0.5 * len(learn_hits)
+    denom = matched_weight + len(missing)
+    coverage = (matched_weight / denom) if denom else 0.0
+    depth = min(1.0, matched_weight / 10.0)
+    skill_points = round(weights["skills"] * coverage * depth)
     if core_hits:
         reasons.append("matches core skills: " + ", ".join(core_hits[:6]))
     if fam_hits and not core_hits:
         reasons.append("matches familiar skills: " + ", ".join(fam_hits[:5]))
-    missing = detect_gaps(text, profile)
     if missing:
         gaps.append("skills to address: " + ", ".join(missing[:6]))
 

@@ -87,6 +87,24 @@
 {% endfor %}
 {% endif %}
 
+{% if publications %}
+<h2>Publications</h2>
+<ul>
+  {%- for pub in publications %}
+  <li><b>{{ pub.name }}</b>{% if pub.publisher %} — {{ pub.publisher }}{% endif %}{% if pub.date %} ({{ pub.date }}){% endif %}{% if pub.url %} · <a href="{{ pub.url }}">link</a>{% endif %}</li>
+  {%- endfor %}
+</ul>
+{% endif %}
+
+{% if awards %}
+<h2>Achievements</h2>
+<ul>
+  {%- for award in awards %}
+  <li><b>{{ award.title }}</b>{% if award.awarder %} — {{ award.awarder }}{% endif %}{% if award.date %} ({{ award.date }}){% endif %}</li>
+  {%- endfor %}
+</ul>
+{% endif %}
+
 <div class="two-col">
   {% if education %}
   <div>

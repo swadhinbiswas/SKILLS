@@ -189,7 +189,7 @@ def build_context(job: dict, profile: dict) -> dict:
     links = []
     for label, url in (profile.get("links") or {}).items():
         if url:
-            links.append({"label": label.capitalize(), "url": url})
+            links.append({"label": label.replace("_", " ").title(), "url": url})
 
     name = profile.get("name") or "Your Name"
     headline = profile.get("headline") or (profile.get("tracks") or ["Engineer"])[0].replace("_", " ").title()
@@ -248,6 +248,25 @@ def build_context(job: dict, profile: dict) -> dict:
         "skills": _ordered_skills(profile, job),
         "experience": experience,
         "projects": profile.get("projects") or [],
+        "publications": [
+            {
+                "name": pub.get("name", ""),
+                "publisher": pub.get("publisher", ""),
+                "date": pub.get("releaseDate", ""),
+                "url": pub.get("url", ""),
+                "summary": pub.get("summary", ""),
+            }
+            for pub in (profile.get("publications") or []) if isinstance(pub, dict)
+        ],
+        "awards": [
+            {
+                "title": award.get("title", ""),
+                "date": award.get("date", ""),
+                "awarder": award.get("awarder", ""),
+                "summary": award.get("summary", ""),
+            }
+            for award in (profile.get("awards") or []) if isinstance(award, dict)
+        ],
         "education": [
             {
                 "institution": edu.get("institution", ""),
@@ -335,6 +354,19 @@ def render_resume_markdown(ctx: dict) -> str:
             detail = f" — {edu['institution']}" if edu["institution"] else ""
             dates = f" ({edu['dates']})" if edu["dates"] else ""
             lines.append(f"- **{edu['degree']}**{detail}{dates}")
+        lines.append("")
+    if ctx.get("publications"):
+        lines.append("## Publications")
+        for pub in ctx["publications"]:
+            meta = " · ".join(bit for bit in (pub["publisher"], pub["date"]) if bit)
+            link = f" — {pub['url']}" if pub["url"] else ""
+            lines.append(f"- **{pub['name']}**" + (f" ({meta})" if meta else "") + link)
+        lines.append("")
+    if ctx.get("awards"):
+        lines.append("## Achievements")
+        for award in ctx["awards"]:
+            meta = " · ".join(bit for bit in (award["awarder"], award["date"]) if bit)
+            lines.append(f"- **{award['title']}**" + (f" — {meta}" if meta else ""))
         lines.append("")
     if ctx["certifications"]:
         lines.append("## Certifications")
