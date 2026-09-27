@@ -1,0 +1,55 @@
+name: validate skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Spec compliance
+        run: python tools/validate_skills.py
+
+      - name: Catalog and index are in sync
+        run: python tools/build_index.py --check
+
+      - name: Installer parses
+        run: bash -n install.sh
+
+      - name: Installer help works
+        run: ./install.sh --help
+
+      - name: Installer list works
+        run: ./install.sh --list
+
+      - name: Installer tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Bundled script tests
+        run: |
+          set -euo pipefail
+          failed=0
+          for skill in $(find skills -path '*/scripts/*.py' -printf '%h\n' | xargs -n1 dirname | sort -u); do
+            echo "--- $skill"
+            if ! (cd "$skill" && python -m unittest discover -s tests); then
+              failed=1
+            fi
+          done
+          exit $failed

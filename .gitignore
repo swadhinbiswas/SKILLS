@@ -1,0 +1,22 @@
+# Local assistant tooling state (personal, not project content)
+.commandcode/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Local state
+*.log
+.DS_Store
+.env
+.env.*
+
+# Test artifacts
+.coverage
+htmlcov/
